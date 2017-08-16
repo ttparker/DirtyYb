@@ -1,4 +1,4 @@
-function MCRun(params::SystemParameters, bondMultipliers::Array{Float64, 3}, f::IOStream)
+function MCRun(params::SystemParameters, bondMultipliers::Array{Float64, 3})
   system = Yb(params, bondMultipliers)  # initialize spins
   for sweep = 1:params.thermalizationSweeps  # wait for system to thermalize
     MCSweep!(system)
@@ -10,14 +10,7 @@ function MCRun(params::SystemParameters, bondMultipliers::Array{Float64, 3}, f::
     push!(energyList, system.energy)
     push!(psiList, measurePsi(system))
   end
-
-  # write results to file:
-  println(f, "T: ", params.T)
-  println(f, "Energies:")
-  writedlm(f, energyList' / system.N, ", ")
-  println(f, "Psis:")
-  writedlm(f, transpose(psiList), ", ")
-  println(f)
+  RawRunData(params.T, energyList / system.N, psiList)
 end
 
 function randomSpin(r1::Float64, r2::Float64)

@@ -14,6 +14,12 @@ function SystemParameters()
   SystemParameters(0., 0., 0., 0., 0., 0., 0, 0, 0)
 end
 
+type RawRunData
+  T::Float64
+  energyList::Vector{Float64}
+  psiList::Vector{Complex{Float64}}
+end
+
 type SystemSummary
   params::SystemParameters
   Ts::Vector{Float64}
