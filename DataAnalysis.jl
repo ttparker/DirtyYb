@@ -1,14 +1,14 @@
-const dataFiles = ["Output.jld"]  # Raw data output files for this system to be read
-const filename = "L46"  # Name of file to save this system's data
+const dir = "Delta0p4/L46/"  # directory storing the raw data files
+const realizations = ["Real1", "Real2", "Real3", "Real4", "Real5", "Real6"]  # Raw data output files for each disorder realization
 const legendLabel = "N = 2116"  # How to label this system's data in plots
 
 import JLD
 include("CustomTypes.jl")
 
-system = SystemSummary(legendLabel)
-for dataFile in dataFiles
-  runs = JLD.load(dataFile)["runs"]
-  for run in runs
+for realization in realizations
+  system = SystemSummary(legendLabel)
+  system.params = JLD.load(dir * realization * ".jld", "params")::SystemParameters
+  for run in JLD.load(dir * realization * ".jld", "runs")::Vector{RawRunData}
     push!(system.Ts, run.T)
     push!(system.avgEnergies, mean(run.energyList))
     push!(system.energyVariances, var(run.energyList))
@@ -17,8 +17,6 @@ for dataFile in dataFiles
     push!(system.absAvgPsi2s, abs(mean(run.psiList.^2)))
     push!(system.avgAbsPsi2s, mean(abs2(run.psiList)))
   end
+  mkpath("Analyzed/" * dir * realization * "/")
+  JLD.save("Analyzed/" * dir * realization * "/" * realization * ".jld", "system", system)
 end
-system.params = JLD.load(dataFiles[1])["params"]
-
-mkpath("Analyzed")
-JLD.save("Analyzed/" * filename * ".jld", filename, system)
