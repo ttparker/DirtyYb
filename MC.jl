@@ -53,18 +53,5 @@ function measurePsi(system::Yb)
   M2 = sublatticeMagnetization(system.oddRange, system.oddRange, system.spins)
   M3 = sublatticeMagnetization(system.oddRange, system.evenRange, system.spins)
   M4 = sublatticeMagnetization(system.evenRange, system.oddRange, system.spins)
-
-  # in-plane phase (Jpmpm << 0):
-  C1 = [3/2, 3/2*im, 0]
-  C2 = [1/2, -3/2*im, 0]
-  C3 = [-1-sqrt(3)/2*im, -sqrt(3)/2, 0]
-  C4 = [-1+sqrt(3)/2*im, sqrt(3)/2, 0]
-
-#=  # out-of-plane phase (Jpmpm >> 0) order parameter:
-  C1 = [-3/2*im*system.sintheta, 3/2*system.sintheta, 0]
-  C2 = [3/2*im*system.sintheta, 1/2*system.sintheta, 2*system.costheta]
-  C3 = [sqrt(3)/2*system.sintheta, (-1-sqrt(3)/2*im)*system.sintheta, (-1+sqrt(3)*im)*system.costheta]
-  C4 = [-sqrt(3)/2*system.sintheta, (-1+sqrt(3)/2*im)*system.sintheta, (-1-sqrt(3)*im)*system.costheta] =#
-
-  (dot(M1, C1) + dot(M2, C2) + dot(M3, C3) + dot(M4, C4)) / system.N
+  (dot(M1, system.CA) + dot(M2, system.CB) + dot(M3, system.CC) + dot(M4, system.CD)) / system.N
 end
