@@ -10,14 +10,14 @@ type Yb
 
   spins::Array{Float64, 3}  # (n_2, n_3, s)
   energy::Float64
+  MA::Vector{Float64}  # Total (i.e. extensive) magnetizations
+  MB::Vector{Float64}
+  MC::Vector{Float64}
+  MD::Vector{Float64}
   CA::Vector{Complex{Float64}}
   CB::Vector{Complex{Float64}}
   CC::Vector{Complex{Float64}}
   CD::Vector{Complex{Float64}}
-
-  # system-size-dependent quantities for making measurements:
-  evenRange::StepRange{Int64,Int64}  # even integers from 2 to L
-  oddRange::StepRange{Int64,Int64}  # odd integers from 1 to L-1
   N::Int64
 end
 
@@ -64,5 +64,5 @@ function Yb(params::SystemParameters, bondMultipliers::Array{Float64, 3})
     CD = [-sqrt(3)/2*system.sintheta, (-1+sqrt(3)/2*im)*system.sintheta, (-1-sqrt(3)*im)*system.costheta]
   end
 
-  Yb(params.L, params.T, bondMultipliers, Ja1, Ja2, Ja3, spins, energy, CA, CB, CC, CD, 2:2:params.L, 1:2:(params.L-1), params.L^2)
+  Yb(params.L, params.T, bondMultipliers, Ja1, Ja2, Ja3, spins, energy, Vector{Float64}(), Vector{Float64}(), Vector{Float64}(), Vector{Float64}(), CA, CB, CC, CD, params.L^2)
 end
