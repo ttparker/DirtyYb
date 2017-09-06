@@ -1,18 +1,3 @@
-function MCRun(params::SystemParameters, bondMultipliers::Array{Float64, 3})
-  system = Yb(params, bondMultipliers)  # initialize spins
-  for sweep = 1:params.thermalizationSweeps  # wait for system to thermalize
-    MCSweep!(system)
-  end
-  energyList = Float64[]
-  psiList = Complex{Float64}[]  # measurements after each sweep
-  for sweep = 1:params.equilibriumSweeps  # take equilibrium measurements
-    MCSweep!(system)
-    push!(energyList, system.energy)
-    push!(psiList, measurePsi(system))
-  end
-  RawRunData(params.T, energyList / system.N, psiList)
-end
-
 function randomSpin(r1::Float64, r2::Float64)
   z = 2 * r1 - 1
   s = sqrt(1 - z^2)
@@ -54,4 +39,19 @@ function measurePsi(system::Yb)
   M3 = sublatticeMagnetization(system.oddRange, system.evenRange, system.spins)
   M4 = sublatticeMagnetization(system.evenRange, system.oddRange, system.spins)
   (dot(M1, system.CA) + dot(M2, system.CB) + dot(M3, system.CC) + dot(M4, system.CD)) / system.N
+end
+
+function MCRun(params::SystemParameters, bondMultipliers::Array{Float64, 3})
+  system = Yb(params, bondMultipliers)  # initialize spins
+  for sweep = 1:params.thermalizationSweeps  # wait for system to thermalize
+    MCSweep!(system)
+  end
+  energyList = Float64[]
+  psiList = Complex{Float64}[]  # measurements after each sweep
+  for sweep = 1:params.equilibriumSweeps  # take equilibrium measurements
+    MCSweep!(system)
+    push!(energyList, system.energy)
+    push!(psiList, measurePsi(system))
+  end
+  RawRunData(params.T, energyList / system.N, psiList)
 end
