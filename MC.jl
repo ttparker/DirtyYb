@@ -5,34 +5,34 @@ function randomSpin(r1::Float64, r2::Float64)
   [s * cos(phi), s * sin(phi), z]
 end
 
-function MCSweep!(sys::Yb, measure::Bool)
-  ns = rand(1:sys.L, sys.N, 2) # generating all rands at once saves RNG call overhead
-  rands = rand(sys.N, 3)  # (for z, for phi, for flipping prob)
-  for step = 1:sys.N
+function MCSweep!(system::Yb, measure::Bool)
+  ns = rand(1:system.L, system.N, 2) # generating all rands at once saves RNG call overhead
+  rands = rand(system.N, 3)  # (for z, for phi, for flipping prob)
+  for step = 1:system.N
     n2, n3 = ns[step, :]  # pick a spin to flip
-    nw = mod1(n2 + 1, sys.L)
-    se = mod1(n2 - 1, sys.L)
-    sw = mod1(n3 + 1, sys.L)
-    ne = mod1(n3 - 1, sys.L)
+    nw = mod1(n2 + 1, system.L)
+    se = mod1(n2 - 1, system.L)
+    sw = mod1(n3 + 1, system.L)
+    ne = mod1(n3 - 1, system.L)
     candidate = randomSpin(rands[step, 1], rands[step, 2])  # candidate new orientation
-    DeltaS = candidate - sys.spins[n2, n3, :]
-    DeltaE = dot(DeltaS, sys.Ja1 * (sys.bondMultipliers[se, ne, 1] * sys.spins[se, ne, :] + sys.bondMultipliers[n2, n3, 1] * sys.spins[nw, sw, :]) + sys.Ja2 * (sys.bondMultipliers[n2, n3, 2] * sys.spins[nw, n3, :] + sys.bondMultipliers[se, n3, 2] * sys.spins[se, n3, :]) + sys.Ja3 * (sys.bondMultipliers[n2, n3, 3] * sys.spins[n2, sw, :] + sys.bondMultipliers[n2, ne, 3] * sys.spins[n2, ne, :]))
-    if DeltaE <= 0 || rands[step, 3] < exp(-DeltaE / sys.T)
+    DeltaS = candidate - system.spins[n2, n3, :]
+    DeltaE = dot(DeltaS, system.Ja1 * (system.bondMultipliers[se, ne, 1] * system.spins[se, ne, :] + system.bondMultipliers[n2, n3, 1] * system.spins[nw, sw, :]) + system.Ja2 * (system.bondMultipliers[n2, n3, 2] * system.spins[nw, n3, :] + system.bondMultipliers[se, n3, 2] * system.spins[se, n3, :]) + system.Ja3 * (system.bondMultipliers[n2, n3, 3] * system.spins[n2, sw, :] + system.bondMultipliers[n2, ne, 3] * system.spins[n2, ne, :]))
+    if DeltaE <= 0 || rands[step, 3] < exp(-DeltaE / system.T)
       if measure  # update the appropriate sublattice magnetization
         n2Even = iseven(n2)
         n3Even = iseven(n3)
         if n2Even && n3Even
-          sys.MA += DeltaS
+          system.MA += DeltaS
         elseif !n2Even && !n3Even
-          sys.MB += DeltaS
+          system.MB += DeltaS
         elseif !n2Even && n3Even
-          sys.MC += DeltaS
+          system.MC += DeltaS
         else
-          sys.MD += DeltaS
+          system.MD += DeltaS
         end
       end
-      sys.spins[n2, n3, :] = candidate  # replace spin by candidate
-      sys.energy += DeltaE
+      system.spins[n2, n3, :] = candidate  # replace spin by candidate
+      system.energy += DeltaE
     end
   end
 end
