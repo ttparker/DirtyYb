@@ -24,7 +24,7 @@ else
 end
 
 # Main calculation:
-runs = Vector{RawRunData}()
+runs = RawRunData[]
 for currentT in Ts  # MC runs
   params.T = currentT
   push!(runs, MCRun(params, bondMultipliers))
