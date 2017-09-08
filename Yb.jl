@@ -10,15 +10,15 @@ type Yb
 
   spins::Array{Float64, 3}  # (n_2, n_3, s)
   Energy::Float64
-  MA::Vector{Float64}  # Total (i.e. extensive) magnetizations
-  MB::Vector{Float64}
-  MC::Vector{Float64}
-  MD::Vector{Float64}
   CA::Vector{Complex{Float64}}
   CB::Vector{Complex{Float64}}
   CC::Vector{Complex{Float64}}
   CD::Vector{Complex{Float64}}
   N::Int64
+
+  Psi::Complex{Float64}  # total (extensive) sum on local psi
+  Psi2::Complex{Float64}
+  Psi3::Complex{Float64}
 end
 
 function Yb(params::SystemParameters, bondMultipliers::Array{Float64, 3})
@@ -60,5 +60,5 @@ function Yb(params::SystemParameters, bondMultipliers::Array{Float64, 3})
     CD = [-sqrt(3)/2*sintheta, (-1+sqrt(3)/2*im)*sintheta, (-1-sqrt(3)*im)*costheta]
   end
 
-  Yb(params.L, params.T, bondMultipliers, Ja1, Ja2, Ja3, spins, Energy, Float64[], Float64[], Float64[], Float64[], CA, CB, CC, CD, params.L^2)
+  Yb(params.L, params.T, bondMultipliers, Ja1, Ja2, Ja3, spins, Energy, CA, CB, CC, CD, params.L^2, 0, 0, 0)
 end

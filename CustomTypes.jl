@@ -18,6 +18,8 @@ type RawRunData
   T::Float64
   energyList::Vector{Float64}
   psiList::Vector{Complex{Float64}}
+  psi2List::Vector{Complex{Float64}}
+  psi3List::Vector{Complex{Float64}}
 end
 
 type SystemSummary
