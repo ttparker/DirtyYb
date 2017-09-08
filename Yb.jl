@@ -58,10 +58,10 @@ function Yb(params::SystemParameters, bondMultipliers::Array{Float64, 3})
     x = (params.Jpmpm + sqrt(params.Jzpm^2 + params.Jpmpm^2)) / params.Jzpm
     costheta = -1 / sqrt(1 + x^2)
     sintheta = x / sqrt(1 + x^2)
-    CA = [-3/2*im*system.sintheta, 3/2*system.sintheta, 0]
-    CB = [3/2*im*system.sintheta, 1/2*system.sintheta, 2*system.costheta]
-    CC = [sqrt(3)/2*system.sintheta, (-1-sqrt(3)/2*im)*system.sintheta, (-1+sqrt(3)*im)*system.costheta]
-    CD = [-sqrt(3)/2*system.sintheta, (-1+sqrt(3)/2*im)*system.sintheta, (-1-sqrt(3)*im)*system.costheta]
+    CA = [-3/2*im*sintheta, 3/2*sintheta, 0]
+    CB = [3/2*im*sintheta, 1/2*sintheta, 2*costheta]
+    CC = [sqrt(3)/2*sintheta, (-1-sqrt(3)/2*im)*sintheta, (-1+sqrt(3)*im)*costheta]
+    CD = [-sqrt(3)/2*sintheta, (-1+sqrt(3)/2*im)*sintheta, (-1-sqrt(3)*im)*costheta]
   end
 
   Yb(params.L, params.T, bondMultipliers, Ja1, Ja2, Ja3, spins, energy, Vector{Float64}(), Vector{Float64}(), Vector{Float64}(), Vector{Float64}(), CA, CB, CC, CD, params.L^2)
