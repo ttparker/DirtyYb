@@ -31,9 +31,11 @@ type SystemSummary
   avgAbsPsis::Vector{Float64}
   absAvgPsi2s::Vector{Float64}
   avgAbsPsi2s::Vector{Float64}
+  absAvgPsi3s::Vector{Float64}
+  avgAbsPsi3s::Vector{Float64}
   legendLabel::String
 end
 
 function SystemSummary(legendLabel::String)
-  SystemSummary(SystemParameters(), [], [], [], [], [], [], [], legendLabel)
+  SystemSummary(SystemParameters(), Float64[], Float64[], Float64[], Float64[], Float64[], Float64[], Float64[], Float64[], Float64[], legendLabel)
 end
