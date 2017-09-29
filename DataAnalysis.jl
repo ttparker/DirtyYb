@@ -1,14 +1,12 @@
 const dir = "JNeg/Delta0p4/L46/"  # directory storing the raw data files
 const realizations = ["Real1", "Real2", "Real3", "Real4", "Real5"]  # Raw data output files for each disorder realization
-const legendLabel = "In-plane phase\nDelta = 0.4, N = 2116"  # How to label this system's data in plots
 
 import JLD
 include("CustomTypes.jl")
 
 mkpath("Analyzed/" * dir)
 for realization in realizations
-  system = SystemSummary(legendLabel)
-  system.params = JLD.load("Results/" * dir * realization * ".jld", "params")::SystemParameters
+  system = SystemSummary(JLD.load("Results/" * dir * realization * ".jld", "params")::SystemParameters)
   for run in JLD.load("Results/" * dir * realization * ".jld", "runs")::Vector{RawRunData}
     push!(system.Ts, run.T)
     push!(system.avgEnergies, mean(run.energyList))
