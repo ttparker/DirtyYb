@@ -19,7 +19,7 @@ end
     println("No AnalyzedData directory found - run DataAnalysis.jl first.")
     quit()
   end
-  system = JLD.load("Analyzed/" * dir * "Averaged/L46.jld", "L46")
+  system = JLD.load("Analyzed/" * dir * "Averaged/L46.jld", "L46")::SystemSummary
 
   # Make plots:
   drawPlot(system, x -> x.avgEnergies, "E/N", "Energy density", "Averaged/Energy")

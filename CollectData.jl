@@ -7,10 +7,10 @@ import JLD
 
 mkpath("Results/" * dir)
 for real in reals
-  params::SystemParameters = JLD.load("Runs/" * dir * real * "/Block1/Output.jld", "params")
-  runs::Vector{RawRunData} = JLD.load("Runs/" * dir * real * "/Block1/Output.jld", "runs")
+  params = JLD.load("Runs/" * dir * real * "/Block1/Output.jld", "params")::SystemParameters
+  runs = JLD.load("Runs/" * dir * real * "/Block1/Output.jld", "runs")::Vector{RawRunData}
   for blockNo = 2:nBlocks
-    append!(runs, JLD.load("Runs/" * dir * real * "/Block" * string(blockNo) * "/Output.jld", "runs"))
+    append!(runs, JLD.load("Runs/" * dir * real * "/Block" * string(blockNo) * "/Output.jld", "runs")::Vector{RawRunData})
   end
   JLD.save("Results/" * dir * real * ".jld", "params", params, "runs", runs)
 end
